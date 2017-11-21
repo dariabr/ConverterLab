@@ -1,9 +1,12 @@
-package com.joyfullkiwi.converterlab;
+package com.joyfullkiwi.converterlab.Activities;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.joyfullkiwi.converterlab.R;
+
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
