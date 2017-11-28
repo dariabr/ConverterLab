@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">ConverterLab</string>
+    <string name="notification_line">UpdatingData</string>
+    <string name="phone_info">Тел.:\u0020</string>
+    <string name="adress_info">Адрес:\u0020</string>
+    <string name="full_phone_info">Контактный телефон:\u0020</string>
+    <string name="additional_info">Дополнительная информация:\u0020</string>
+    <string name="ask_bid_title">Покупка /\nПродажа</string>
+    <string name="currency_name">Название валюты</string>
+    <string name="fab_link_title">Сайт</string>
+    <string name="fab_phone_title">Позвонить</string>
+    <string name="fab_map_title">Карта</string>
+    <string name="share">Share</string>
+    <string name="search">Search</string>
 </resources>

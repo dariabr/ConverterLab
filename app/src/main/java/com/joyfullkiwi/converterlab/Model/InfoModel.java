@@ -21,17 +21,6 @@ public class InfoModel implements Parcelable {
     private String link;
     private Map<String, MoneyModel> currencies = null;
 
-   /* protected InfoModel(Parcel in) {
-        id = in.readString();
-        title = in.readString();
-        regionTitle = in.readString();
-        cityTitle = in.readString();
-        phone = in.readString();
-        adress = in.readString();
-        link = in.readString();
-    }*/
-
-    //public InfoModel(){}
 
     public String getId() { return id; }
 
