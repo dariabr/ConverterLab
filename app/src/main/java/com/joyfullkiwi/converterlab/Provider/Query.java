@@ -1,49 +1,59 @@
 package com.joyfullkiwi.converterlab.Provider;
 
-import android.util.Log;
 
-import com.ihsanbal.logging.Level;
-import com.ihsanbal.logging.LoggingInterceptor;
-import com.joyfullkiwi.converterlab.BuildConfig;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.joyfullkiwi.converterlab.GSON.CityAdapter;
+import com.joyfullkiwi.converterlab.GSON.CurrenciesAdapter;
+import com.joyfullkiwi.converterlab.GSON.CurrencyAdapter;
+import com.joyfullkiwi.converterlab.GSON.OrganizationAdapter;
+import com.joyfullkiwi.converterlab.GSON.RegionAdapter;
+import com.joyfullkiwi.converterlab.Models.City;
+import com.joyfullkiwi.converterlab.Models.Currencies;
+import com.joyfullkiwi.converterlab.Models.Currency;
+import com.joyfullkiwi.converterlab.Models.Organization;
+import com.joyfullkiwi.converterlab.Models.Region;
 import com.joyfullkiwi.converterlab.Utils.Constants;
 
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.List;
 
+import io.realm.RealmList;
+import retrofit2.Retrofit;
+
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Query {
 
-    private static API instance;
+    private static Query instance;
+    private final API api;
 
-    private Query() {
+    private Query(){
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(new TypeToken<List<City>>(){}.getType(), CityAdapter.INSTANCE)
+                .registerTypeAdapter(new TypeToken<List<Region>>() {}.getType(), RegionAdapter.INSTANCE)
+                .registerTypeAdapter(new TypeToken<List<Currencies>>() {}.getType(), CurrenciesAdapter.INSTANCE)
+                .registerTypeAdapter(new TypeToken<List<Organization>>() {}.getType(), OrganizationAdapter.INSTANCE)
+                .registerTypeAdapter(new TypeToken<RealmList<Currency>>() {}.getType(), CurrencyAdapter.INSTANCE)
+                .create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        api = retrofit.create(API.class);
     }
 
-    public static API getInstance() {
-        if (instance == null) {
-
-            OkHttpClient.Builder client = new OkHttpClient.Builder();
-            client.addInterceptor(new LoggingInterceptor.Builder()
-                    .loggable(BuildConfig.DEBUG)
-                    .setLevel(Level.BASIC)
-                    .log(Log.INFO)
-                    .request("Request")
-                    .response("Response")
-                    .addHeader("version", BuildConfig.VERSION_NAME)
-                    .build());
-            OkHttpClient okHttpClient = client.build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.BASE_URL)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            instance = retrofit.create(API.class);
-
-            return instance;
-        } else {
+    public static Query getInstance(){
+        if(instance == null){
+            instance = new Query();
             return instance;
         }
+        return instance;
     }
+
+    public API getApi(){ return api;}
+
+
 }

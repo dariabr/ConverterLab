@@ -1,20 +1,15 @@
 package com.joyfullkiwi.converterlab.Provider;
 
-import com.joyfullkiwi.converterlab.Model.ObjectModel;
 
-import java.util.List;
+import com.joyfullkiwi.converterlab.Models.Information;
 
-import retrofit2.Call;
-import retrofit2.Callback;
+
+import io.reactivex.Observable;
 import retrofit2.http.GET;
-
 
 public interface API {
 
     @GET("/ru/public/currency-cash.json")
+    Observable<Information> getCurrencyCash();
 
-    void getObjectModel(Callback<ObjectModel> callback);
-
-    // Callback<ObjectModel> getObjectModel;
-//Call<List<ObjectModel>> getObjectModel;
 }
