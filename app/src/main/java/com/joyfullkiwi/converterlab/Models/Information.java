@@ -1,13 +1,14 @@
 package com.joyfullkiwi.converterlab.Models;
 
 
+import java.util.Date;
 import java.util.List;
 
 import io.realm.RealmList;
 
 public class Information {
 
-    private String date;
+    private DateRate date;
 
     private List<City> cities;
     private List<Region> regions;
@@ -15,11 +16,11 @@ public class Information {
     private RealmList<Organization> organizations;
 
 
-    public void setDate(String date) {
+    public void setDate(DateRate date) {
         this.date = date;
     }
 
-    public String getDate() {
+    public DateRate getDate() {
         return date;
     }
 

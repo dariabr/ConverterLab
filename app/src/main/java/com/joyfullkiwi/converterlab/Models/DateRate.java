@@ -6,14 +6,15 @@ import io.realm.annotations.PrimaryKey;
 
 public class DateRate extends RealmObject {
 
-    @PrimaryKey
-    private String date;
 
-    public void setDate(String date) {
-        this.date = date;
+
+   private long time;
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
-    public String getDate() {
-        return date;
+    public long getTime() {
+        return time;
     }
 }

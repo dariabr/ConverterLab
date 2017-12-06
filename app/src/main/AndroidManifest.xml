@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -15,13 +16,30 @@
         android:theme="@style/AppTheme"
         android:name=".App"
         >
-        <activity android:name=".Home.HomeActivity">
+        <activity android:name=".Home.HomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".Service.UpdateService"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBeOnzl9cBpi26-Z1cbXVc9IlIktgKBO5g"/>
+
+        <activity android:name=".Map.MapActivity"
+            android:screenOrientation="portrait"
+            android:label="Map"
+            />
+
+        <activity android:name=".Detail.DetailActivity"
+            android:label="Detail"/>
+
+
     </application>
 
 </manifest>

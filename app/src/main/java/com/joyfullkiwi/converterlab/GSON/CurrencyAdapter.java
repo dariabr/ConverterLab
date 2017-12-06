@@ -4,6 +4,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.joyfullkiwi.converterlab.Models.Currency;
+import com.joyfullkiwi.converterlab.Models.Price;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,14 +29,17 @@ public class CurrencyAdapter extends TypeAdapter<RealmList<Currency>> {
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
             Currency currency = new Currency();
-            currency.setCurrency(jsonReader.nextName());
+            Price price = new Price();
+            currency.setCurrencyName(jsonReader.nextName());
             jsonReader.beginObject();
             jsonReader.nextName();
-            currency.setAsk(Double.valueOf(jsonReader.nextString()));
+            price.setAsk(Double.valueOf(jsonReader.nextString()));
             jsonReader.nextName();
-            currency.setBid(Double.valueOf(jsonReader.nextString()));
+            price.setBid(Double.valueOf(jsonReader.nextString()));
             jsonReader.endObject();
+            currency.setPrice(price);
             currencies.add(currency);
+
         }
         jsonReader.endObject();
         return currencies;

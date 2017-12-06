@@ -7,11 +7,13 @@ import com.google.gson.reflect.TypeToken;
 import com.joyfullkiwi.converterlab.GSON.CityAdapter;
 import com.joyfullkiwi.converterlab.GSON.CurrenciesAdapter;
 import com.joyfullkiwi.converterlab.GSON.CurrencyAdapter;
+import com.joyfullkiwi.converterlab.GSON.DateAdapter;
 import com.joyfullkiwi.converterlab.GSON.OrganizationAdapter;
 import com.joyfullkiwi.converterlab.GSON.RegionAdapter;
 import com.joyfullkiwi.converterlab.Models.City;
 import com.joyfullkiwi.converterlab.Models.Currencies;
 import com.joyfullkiwi.converterlab.Models.Currency;
+import com.joyfullkiwi.converterlab.Models.DateRate;
 import com.joyfullkiwi.converterlab.Models.Organization;
 import com.joyfullkiwi.converterlab.Models.Region;
 import com.joyfullkiwi.converterlab.Utils.Constants;
@@ -36,6 +38,7 @@ public class Query {
                 .registerTypeAdapter(new TypeToken<List<Currencies>>() {}.getType(), CurrenciesAdapter.INSTANCE)
                 .registerTypeAdapter(new TypeToken<List<Organization>>() {}.getType(), OrganizationAdapter.INSTANCE)
                 .registerTypeAdapter(new TypeToken<RealmList<Currency>>() {}.getType(), CurrencyAdapter.INSTANCE)
+                .registerTypeAdapter(new TypeToken<DateRate>(){}.getType(), DateAdapter.INSTANCE)
                 .create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

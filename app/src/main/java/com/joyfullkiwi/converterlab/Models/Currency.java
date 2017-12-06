@@ -2,39 +2,22 @@ package com.joyfullkiwi.converterlab.Models;
 
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 public class Currency extends RealmObject {
 
     @PrimaryKey
-    private String currency;
+    private String currencyName;
 
-    private double ask;
+   @Ignore
+    private Price price;
 
-    private double bid;
+    public String getCurrencyName() { return currencyName; }
 
-    public String getCurrency() {
-        return currency;
-    }
+    public void setCurrencyName(String currencyName) { this.currencyName = currencyName; }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+    public Price getPrice() { return price; }
 
-    public double getAsk() {
-        return ask;
-    }
-
-    public void setAsk(double ask) {
-        this.ask = ask;
-    }
-
-    public double getBid() {
-        return bid;
-    }
-
-    public void setBid(double bid) {
-        this.bid = bid;
-    }
-
+    public void setPrice(Price price) { this.price = price; }
 }

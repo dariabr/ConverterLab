@@ -12,4 +12,10 @@
     <string name="fab_map_title">Карта</string>
     <string name="share">Share</string>
     <string name="search">Search</string>
+
+    <string name="confirm">Подтвердит</string>
+    <string name="cancel">Отмена</string>
+    <string name="settings">Настройки</string>
+    <string name="msg.denied"><![CDATA[Если вы отклоните разрешение, то вы не сможете пользоваться сервисом  Пожалуйста, включите разрешение в [Настройки] > [Разрешения]]]></string>
+    <string name="rationale.msg.map">Для доступа к карте, приложению необходимо получить разрешение использования данных о местоположении устройства</string>
 </resources>

@@ -7,6 +7,11 @@ import com.google.gson.stream.JsonWriter;
 import com.joyfullkiwi.converterlab.Models.DateRate;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class DateAdapter extends TypeAdapter<DateRate> {
 
@@ -22,7 +27,13 @@ public class DateAdapter extends TypeAdapter<DateRate> {
     @Override
     public DateRate read(JsonReader jsonReader) throws IOException {
         DateRate dateRate = new DateRate();
-        dateRate.setDate(jsonReader.nextName());
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss+02:00", Locale.getDefault());
+        try {
+            Date serverDate = format.parse(jsonReader.nextString());
+            dateRate.setTime(serverDate.getTime());
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
         return dateRate;
     }
 }
