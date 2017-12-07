@@ -95,13 +95,14 @@ public class HomeInteractor {
                         Price dbPrice = realm.createObject(Price.class);
                         dbPrice.setAsk(serverPrice.getAsk());
                         dbPrice.setBid(serverPrice.getBid());
-                        dbPrice.setCurrencyName(currency.getCurrencyName());
+                        dbPrice.setCurrencyName(currency.getCurrencyId());
                         dbPrice.setOrganizationId(org.getId());
                     });
-            realm.copyToRealmOrUpdate(organization);
+
         }
 
         realm.commitTransaction();
+        realm.close();
     }
 
 

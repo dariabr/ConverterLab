@@ -30,7 +30,7 @@ public class CurrencyAdapter extends TypeAdapter<RealmList<Currency>> {
         while (jsonReader.hasNext()) {
             Currency currency = new Currency();
             Price price = new Price();
-            currency.setCurrencyName(jsonReader.nextName());
+            currency.setCurrencyId(jsonReader.nextName());
             jsonReader.beginObject();
             jsonReader.nextName();
             price.setAsk(Double.valueOf(jsonReader.nextString()));

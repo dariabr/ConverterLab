@@ -1,69 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/abc_button_padding_horizontal_material"
-    card_view:cardCornerRadius="0dp"
-    card_view:cardElevation="@dimen/cardview_default_elevation"
-    >
-    <RelativeLayout
+<layout>
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:padding="16dp">
-        <TextView
-            android:layout_width="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="@dimen/cardview_default_elevation">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textColor="@color/accent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:id="@+id/text_title_info_card"
-            android:padding="@dimen/abc_button_padding_horizontal_material"
-            />
-        <TextView
-            android:id="@+id/text_adress_sign"
-            android:text="@string/adress_info"
-            android:layout_alignLeft="@+id/text_title_info_card"
-            android:layout_alignStart="@+id/text_title_info_card"
-            android:layout_below="@+id/text_title_info_card"
-            style="@style/text_view_sign"/>
-        <TextView
-            android:text="Address"
-            android:id="@+id/text_adress_info_card"
-            android:layout_alignTop="@+id/text_adress_sign"
-            android:layout_toRightOf="@+id/text_adress_sign"
-            android:layout_toEndOf="@+id/text_adress_sign"
-            style="@style/text_view_info"/>
-        <TextView
-            android:id="@+id/text_phone_sign"
-            android:text="@string/full_phone_info"
-            android:layout_alignLeft="@+id/text_title_info_card"
-            android:layout_alignStart="@+id/text_title_info_card"
-            android:layout_below="@+id/text_adress_info_card"
-            style="@style/text_view_sign"/>
-        <TextView
-            android:text="Phone"
-            android:id="@+id/text_phone_info_card"
-            android:layout_alignTop="@+id/text_phone_sign"
-            android:layout_toRightOf="@+id/text_phone_sign"
-            android:layout_toEndOf="@+id/text_phone_sign"
-            style="@style/text_view_info"/>
-        <TextView
-            android:id="@+id/text_additional_sign"
-            android:text="@string/additional_info"
-            android:layout_alignLeft="@+id/text_title_info_card"
-            android:layout_alignStart="@+id/text_title_info_card"
-            android:layout_below="@+id/text_phone_info_card"
-            style="@style/text_view_sign"/>
-        <TextView
-            android:text="Link"
-            android:id="@+id/text_add_info_card"
-            android:layout_alignTop="@+id/text_additional_sign"
-            android:layout_toRightOf="@+id/text_additional_sign"
-            android:layout_toEndOf="@+id/text_additional_sign"
-            style="@style/text_view_info"/>
-    </RelativeLayout>
+            android:padding="16dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_title_info_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/abc_button_padding_horizontal_material"
+                android:text="Title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/colorAccent" />
+            <TextView
+                android:id="@+id/text_adress_sign"
+                style="@style/text_view_sign"
+                android:layout_alignLeft="@+id/text_title_info_card"
+                android:layout_alignStart="@+id/text_title_info_card"
+                android:layout_below="@+id/text_title_info_card"
+                android:text="@string/adress_info"
+                android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/text_adress_info_card"
+                style="@style/text_view_info"
+                android:layout_alignTop="@+id/text_adress_sign"
+                android:layout_toEndOf="@+id/text_adress_sign"
+                android:layout_toRightOf="@+id/text_adress_sign"
+                android:text="Address"
+                android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/text_phone_sign"
+                style="@style/text_view_sign"
+                android:layout_alignLeft="@+id/text_title_info_card"
+                android:layout_alignStart="@+id/text_title_info_card"
+                android:layout_below="@+id/text_adress_info_card"
+                android:text="@string/full_phone_info"
+                android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/text_phone_info_card"
+                style="@style/text_view_info"
+                android:layout_alignTop="@+id/text_phone_sign"
+                android:layout_toEndOf="@+id/text_phone_sign"
+                android:layout_toRightOf="@+id/text_phone_sign"
+                android:text="Phone"
+                android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/text_additional_sign"
+                style="@style/text_view_sign"
+                android:layout_alignLeft="@+id/text_title_info_card"
+                android:layout_alignStart="@+id/text_title_info_card"
+                android:layout_below="@+id/text_phone_info_card"
+                android:text="@string/additional_info"
+                android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/text_add_info_card"
+                style="@style/text_view_info"
+                android:layout_below="@+id/text_additional_sign"
+                android:text="Link"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</layout>

@@ -125,25 +125,36 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                     .check();
         });
 
-        hold.view.imageMoreOrgCard.setOnClickListener( view ->
-                startActivityWithOrgId(DetailActivity.class,filteredOrganizations.get(position).getId()));
-       // hold.view.textPhoneOrgCard.setText(String.format("Тел.: %s", organization.getPhone()));
-       // hold.view.textAdressOrgCard.setText(String.format("Адрес : %s", organization.getAddress()))
+        hold.view.imageMoreOrgCard.setOnClickListener(
+                view -> startActivityWithOrganizationId(DetailActivity.class,
+                        filteredOrganizations.get(position).getId()));
+
 
         hold.view.imageMapOrgCard.setOnClickListener( view ->
-                startActivityWithOrgId(MapActivity.class,filteredOrganizations.get(position).getId()));
+                startActivityWithOrganizationId(MapActivity.class,filteredOrganizations.get(position).getId()));
 
-       // hold.view.imageLinkOrgCard.setOnClickListener( view ->
-               // CustomTabsIntent custom = new CustomTabsIntent().builder
-       // );
+        hold.view.imageLinkOrgCard.setOnClickListener(view -> {
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                    .setStartAnimations(context,R.anim.slide_in_right,R.anim.slide_out_left)
+                    .setStartAnimations(context,R.anim.slide_in_left,R.anim.slide_out_right)
+                    .setToolbarColor(context.getResources().getColor(R.color.colorPrimary))
+                    .build();
+
+            Uri url = Uri.parse(filteredOrganizations.get(position).getLink());
+            customTabsIntent.launchUrl(context,url);
+        });
+        //hold.view.imageLinkOrgCard.setOnClickListener( view ->
+               // CustomTabsIntent
+        //);
         realm.commitTransaction();
     }
 
-    private void startActivityWithOrgId(Class activity,String id){
-        Intent intent = new Intent(context, activity);
-        intent.putExtra("orgId",id);
+    private void startActivityWithOrganizationId(Class activityClass, String id) {
+        Intent intent = new Intent(context, activityClass);
+        intent.putExtra("orgId", id);
         context.startActivity(intent);
     }
+
     @Override
     public int getItemCount() {
         return organizations != null ? organizations.size() : 0;

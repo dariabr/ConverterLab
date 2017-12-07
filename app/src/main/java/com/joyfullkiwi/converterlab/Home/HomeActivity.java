@@ -30,8 +30,8 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class HomeActivity extends BaseActivity implements HomeView {
-
     public static final String TAG = "TAG";
+
     @InjectPresenter
     HomePresenter homePresenter;
 
@@ -39,68 +39,79 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
     private OrganizationsListBinding bind;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //
+
         stopUpdateService();
-        bind = DataBindingUtil.setContentView(this,R.layout.organizations_list);
-        bind.swipe.setColorSchemeColors(R.color.colorPrimary,R.color.colorAccent, R.color.colorPrimaryDark);
+
+        bind = DataBindingUtil.setContentView(this, R.layout.organizations_list);
+        bind.swipe.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent,
+                R.color.colorPrimaryDark);
+
         adapter = new HomeAdapter(this);
         bind.recyclerHome.setLayoutManager(new LinearLayoutManager(this));
         bind.recyclerHome.setAdapter(adapter);
+
         setSupportActionBar(bind.toolbar);
 
         bind.swipe.setOnRefreshListener(() -> homePresenter.loadData());
-
     }
 
-
-    //старт сервиса запись
-    private void startUpdateService(){
-        AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), UpdateService.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
-        alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(),AlarmManager.INTERVAL_HALF_HOUR,pendingIntent);
-        Log.d(TAG,"start update servicr");
-
-    }
-
-
-    //остановка сервиса по обновлению даных в бд
-    private void stopUpdateService(){
+    /**
+     * остановка сервиса по обновлению данных в бд
+     */
+    private void stopUpdateService() {
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(),UpdateService.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+        Intent intent = new Intent(getApplicationContext(), UpdateService.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         alarmManager.cancel(pendingIntent);
-        Log.d(TAG,"cancel update service");
+        Log.d(TAG, "cancel update service");
     }
+
+    /**
+     * запуск сервиса по обновлению данных в бд
+     */
+    private void startUpdateService() {
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), UpdateService.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        alarmManager
+                .setRepeating(AlarmManager.RTC, System.currentTimeMillis(), AlarmManager.INTERVAL_HALF_HOUR,
+                        pendingIntent);
+        Log.d(TAG, "start update service");
+    }
+
     @Override
     public void onSuccessLoaded(RealmList<Organization> organizations) {
         adapter.setOrganizations(organizations);
     }
-
-
 
     @Override
     public void setSwipeRefreshing(boolean swipe) {
         bind.swipe.setRefreshing(swipe);
     }
 
+  /*@Override
+  public void onDateUpdate(Date date) {
+    //TODO придумать отображение информации о последнем обновлении в бд
+    //DateFormat resultFormat = new SimpleDateFormat("dd MMMM 'в' kk:mm", Locale.getDefault());
+    //toast("Последнее обновление: " + resultFormat.format(date));
+  }*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         SearchView searchView = (SearchView) item.getActionView();
-        unsubscribeOnDestroy(RxAndroid.search(searchView).debounce(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+        //Слушатель на поиск с задержкой в 500 мс
+        unsubscribeOnDestroy(RxAndroid.search(searchView)
+                .debounce(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe(result -> adapter.filter(result)));
-
         return super.onOptionsItemSelected(item);
     }
 

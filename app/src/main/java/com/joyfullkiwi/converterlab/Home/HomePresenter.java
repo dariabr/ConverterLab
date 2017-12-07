@@ -31,6 +31,7 @@ public class HomePresenter extends MvpPresenter<HomeView> {
     }
 
     public void loadData(){
+        getViewState().setSwipeRefreshing(true);
 
         interactor.getAndWriteData()
                 //перекл в главныйпоток
@@ -40,7 +41,8 @@ public class HomePresenter extends MvpPresenter<HomeView> {
                 //если ошибка тоже читаем с бд
                 .onErrorReturn(throwable -> readOrganizationsInDb())
                 .subscribe(results ->{
-                    getViewState().setSwipeRefreshing(true);
+                    getViewState().setSwipeRefreshing(false);
+                    //передача даных в UI
                     getViewState().onSuccessLoaded(results);
                 });
     }

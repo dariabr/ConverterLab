@@ -8,16 +8,24 @@ import io.realm.annotations.PrimaryKey;
 public class Currency extends RealmObject {
 
     @PrimaryKey
-    private String currencyName;
+    private String currencyId;
 
-   @Ignore
+    @Ignore
     private Price price;
 
-    public String getCurrencyName() { return currencyName; }
+    public String getCurrencyId() {
+        return currencyId;
+    }
 
-    public void setCurrencyName(String currencyName) { this.currencyName = currencyName; }
+    public void setCurrencyId(String currencyId) {
+        this.currencyId = currencyId;
+    }
 
-    public Price getPrice() { return price; }
+    public void setPrice(Price price) {
+        this.price = price;
+    }
 
-    public void setPrice(Price price) { this.price = price; }
+    public Price getPrice() {
+        return price;
+    }
 }
