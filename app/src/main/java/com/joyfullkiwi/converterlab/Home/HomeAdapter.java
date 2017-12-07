@@ -96,12 +96,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder hold, int position) {
         Organization organization = organizations.get(position);
         realm.beginTransaction();
+
         hold.view.textTitleOrgCard.setText(organization.getTitle());
         String region = realm.where(Region.class).equalTo("id", organization.getRegionId()).findFirst().getName();
         hold.view.textRegionTitleOrgCard.setText(region);
 
         String city = realm.where(City.class).equalTo("id", organization.getCityId()).findFirst().getName();
         hold.view.textCityTitleOrgCard.setText(city);
+
+        hold.view.textPhoneOrgCard.setText(String.format("Tell:$s",organization.getPhone()));
+        hold.view.textAdressOrgCard.setText(String.format("Adress :$s",organization.getAddress()));
 
         hold.view.imagePhoneOrgCard.setOnClickListener(view -> {
             String phone = filteredOrganizations.get(position).getPhone();
@@ -111,10 +115,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 public void onPermissionGranted() {
                     context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phone)));
                 }
-
                 @Override
                 public void onPermissionDenied(ArrayList<String> arrayList) {
-
                 }
             })
                     .setRationaleConfirmText(res.getString(R.string.confirm))
