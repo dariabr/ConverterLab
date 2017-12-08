@@ -32,19 +32,16 @@ import io.realm.RealmResults;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
-    //private Context context;
     private final Activity context;
     private Resources res;
     private RealmList<Organization> organizations = new RealmList<>();
-    private RealmList<Organization> filteredOrganizations =new RealmList<>();//
-
+    private RealmList<Organization> filteredOrganizations = new RealmList<>();
     private LayoutInflater layoutInflater;
     private Realm realm = Realm.getDefaultInstance();
 
     public HomeAdapter(Activity context) {
         this.context = context;
         res = context.getResources();
-
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -62,6 +59,27 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         return new ViewHolder(view);
     }
 
+    public void filter(String filter) {
+        if (checkIsEmptyFilter(filter)) {
+            return;
+        }
+        realm.beginTransaction();
+        filteredOrganizations.clear();
+        for (int i = 0; i < organizations.size(); i++) {
+            Organization organization = organizations.get(i);
+            String title = organization.getTitle().toLowerCase();
+            String region = realm.where(Region.class).equalTo("id", organization.getRegionId())
+                    .findFirst().getName().toLowerCase();
+            String city = realm.where(City.class).equalTo("id", organization.getCityId()).findFirst()
+                    .getName().toLowerCase();
+            if (title.startsWith(filter) || region.startsWith(filter) || city.startsWith(filter)) {
+                filteredOrganizations.add(organization);
+            }
+        }
+        notifyDataSetChanged();
+        realm.commitTransaction();
+    }
+
     private boolean checkIsEmptyFilter(String filter) {
         if (filter.equals("")) {
             filteredOrganizations.clear();
@@ -71,41 +89,25 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         }
         return false;
     }
-    public void filter(String filter){
-        if(checkIsEmptyFilter(filter)){return;}
-        realm.beginTransaction();
-        filteredOrganizations.clear();
-        for (int i=0;i<organizations.size();i++){
-            Organization organization = organizations.get(i);
-            String title = organization.getTitle().toLowerCase();
-            String region = realm.where(Region.class).equalTo("id",organization.getRegionId())
-                    .findFirst().getName().toLowerCase();
-            String city = realm.where(City.class).equalTo("id",organization.getCityId()).findFirst()
-                    .getName().toLowerCase();
-            if(title.startsWith(filter)|| region.startsWith(filter)|| city.startsWith(filter)){
-                filteredOrganizations.add(organization);
-            }
-            notifyDataSetChanged();
-            realm.commitTransaction();
-        }
-    }
-
-
 
     @Override
     public void onBindViewHolder(ViewHolder hold, int position) {
-        Organization organization = organizations.get(position);
+        Organization organization = filteredOrganizations.get(position);
         realm.beginTransaction();
 
+        // animateView(hold);
+
         hold.view.textTitleOrgCard.setText(organization.getTitle());
-        String region = realm.where(Region.class).equalTo("id", organization.getRegionId()).findFirst().getName();
+        String region = realm.where(Region.class).equalTo("id", organization.getRegionId()).findFirst()
+                .getName();
         hold.view.textRegionTitleOrgCard.setText(region);
 
-        String city = realm.where(City.class).equalTo("id", organization.getCityId()).findFirst().getName();
+        String city = realm.where(City.class).equalTo("id", organization.getCityId()).findFirst()
+                .getName();
         hold.view.textCityTitleOrgCard.setText(city);
 
-        hold.view.textPhoneOrgCard.setText(String.format("Tell:$s",organization.getPhone()));
-        hold.view.textAdressOrgCard.setText(String.format("Adress :$s",organization.getAddress()));
+        hold.view.textPhoneOrgCard.setText(String.format("Тел.: %s", organization.getPhone()));
+        hold.view.textAdressOrgCard.setText(String.format("Адрес : %s", organization.getAddress()));
 
         hold.view.imagePhoneOrgCard.setOnClickListener(view -> {
             String phone = filteredOrganizations.get(position).getPhone();
@@ -113,8 +115,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 @SuppressLint("MissingPermission")
                 @Override
                 public void onPermissionGranted() {
-                    context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phone)));
+                    context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone)));
                 }
+
                 @Override
                 public void onPermissionDenied(ArrayList<String> arrayList) {
                 }
@@ -131,23 +134,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 view -> startActivityWithOrganizationId(DetailActivity.class,
                         filteredOrganizations.get(position).getId()));
 
-
-        hold.view.imageMapOrgCard.setOnClickListener( view ->
-                startActivityWithOrganizationId(MapActivity.class,filteredOrganizations.get(position).getId()));
+        hold.view.imageMapOrgCard.setOnClickListener(
+                view -> startActivityWithOrganizationId(MapActivity.class,
+                        filteredOrganizations.get(position).getId()));
 
         hold.view.imageLinkOrgCard.setOnClickListener(view -> {
             CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
-                    .setStartAnimations(context,R.anim.slide_in_right,R.anim.slide_out_left)
-                    .setStartAnimations(context,R.anim.slide_in_left,R.anim.slide_out_right)
+                    .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
+
                     .setToolbarColor(context.getResources().getColor(R.color.colorPrimary))
                     .build();
-
             Uri url = Uri.parse(filteredOrganizations.get(position).getLink());
-            customTabsIntent.launchUrl(context,url);
+            customTabsIntent.launchUrl(context, url);
         });
-        //hold.view.imageLinkOrgCard.setOnClickListener( view ->
-               // CustomTabsIntent
-        //);
         realm.commitTransaction();
     }
 
@@ -157,9 +157,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         context.startActivity(intent);
     }
 
+
+
+
     @Override
     public int getItemCount() {
-        return organizations != null ? organizations.size() : 0;
+        return filteredOrganizations != null ? filteredOrganizations.size() : 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -9,28 +9,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.joyfullkiwi.converterlab.databinding.CurrencyItemBinding;
 import com.joyfullkiwi.converterlab.Models.Currencies;
 import com.joyfullkiwi.converterlab.Models.CurrencyModel;
 import com.joyfullkiwi.converterlab.Models.Price;
 import com.joyfullkiwi.converterlab.R;
+import com.joyfullkiwi.converterlab.databinding.CurrencyItemBinding;
 
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder>{
+public class CurrencyAdapter  extends  RecyclerView.Adapter<CurrencyAdapter.ViewHolder>{
 
-    private List<CurrencyModel>  modelList;
+    private List<CurrencyModel> modelList;
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public void setCurrencies(List<CurrencyModel> modelList) {
+    public void setCurrencies(List<CurrencyModel> modelList){
         this.modelList = modelList;
         notifyDataSetChanged();
-
     }
 
     public CurrencyAdapter(Context context){
@@ -40,16 +38,16 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(layoutInflater.inflate(R.layout.currency_item, parent, false));
+        return new ViewHolder(layoutInflater.inflate(R.layout.currency_item,parent,false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        CurrencyModel cam = modelList.get(position);
-        holder.bind.textCurrItemTitle.setText(getCurrencyNameById(cam.getCurrencyId()));
-        RealmList<Price> prices = cam.getPrices();
-        if (prices.size() >= 2) {
+        CurrencyModel currencyModel = modelList.get(position);
+        holder.bind.textCurrItemTitle.setText(getCurrencyNameById(currencyModel.getCurrencyId()));
+        RealmList<Price> prices = currencyModel.getPrices();
+        if(prices.size() >= 2){
             Price first = prices.get(0);
             Price second = prices.get(1);
             compareAndSet(first.getAsk(), second.getAsk(), holder.bind.textAskValue, holder.bind.imageAsk);
@@ -65,10 +63,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         }
     }
 
-    private String getCurrencyNameById(String currencyId) {
+    private String getCurrencyNameById(String currencyId){
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        Currencies currencies = realm.where(Currencies.class).equalTo("id", currencyId).findFirst();
+        Currencies currencies = realm.where(Currencies.class).equalTo("id",currencyId).findFirst();
         realm.commitTransaction();
         realm.close();
         return currencies.getName();
@@ -95,12 +93,12 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         return modelList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         private CurrencyItemBinding bind;
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView){
             super(itemView);
-
+            bind = CurrencyItemBinding.bind(itemView);
         }
     }
 

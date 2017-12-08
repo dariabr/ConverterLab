@@ -13,13 +13,29 @@ public class Price extends RealmObject {
 
     private double bid;
 
-    public double getAsk() { return ask; }
+    public Price() {
+    }
 
-    public void setAsk(double ask) { this.ask = ask; }
+    public Price(double ask, double bid) {
+        this.ask = ask;
+        this.bid = bid;
+    }
 
-    public double getBid() { return bid; }
+    public double getAsk() {
+        return ask;
+    }
 
-    public void setBid(double bid) {this.bid = bid; }
+    public void setAsk(double ask) {
+        this.ask = ask;
+    }
+
+    public double getBid() {
+        return bid;
+    }
+
+    public void setBid(double bid) {
+        this.bid = bid;
+    }
 
     public String getOrganizationId() {
         return organizationId;

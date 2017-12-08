@@ -62,46 +62,4 @@ public class HomePresenter extends MvpPresenter<HomeView> {
         return result;
     }
 
-    /*private void handleResult(RealmResults<Organization> results) {
-
-
-        getViewState().onSuccessLoaded(results);
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        for (Organization organization : results) {
-            System.out.println("id = " + organization.getId());
-            System.out.println("title = " + organization.getTitle());
-
-            String cityName = realm
-                    .where(City.class)
-                    .equalTo("id", organization.getCityId())
-                    .findFirst()
-                    .getName();
-
-            String regionName = realm
-                    .where(Region.class)
-                    .equalTo("id", organization.getRegionId())
-                    .findFirst()
-                    .getName();
-
-            System.out.println("city = " + cityName);
-            System.out.println("region = " + regionName);
-            System.out.println("address = " + organization.getAddress());
-            System.out.println("link = " + organization.getLink());
-        }
-        realm.commitTransaction();
-    }
-
-
-    private RealmResults<Organization> readRealm() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-
-        RealmResults<Organization> organizations = realm.where(Organization.class).findAll();
-
-        realm.commitTransaction();
-
-        return organizations;
-    }*/
 }

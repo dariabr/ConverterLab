@@ -29,7 +29,8 @@ public class DetailPresenter extends MvpPresenter<DetailView> {
 
         getViewState().showCurrencies(detailInteractor.getModelList());
 
-        getViewState().showOrganizationInfo(detailInteractor.getOrganization(),detailInteractor.getCity(),detailInteractor.getRegion());
+        getViewState().showOrganizationInfo(detailInteractor.getOrganization(),detailInteractor.getCity(),
+                detailInteractor.getRegion());
     }
 
 }

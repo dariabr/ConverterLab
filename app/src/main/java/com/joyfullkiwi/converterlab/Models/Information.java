@@ -7,7 +7,6 @@ import java.util.List;
 import io.realm.RealmList;
 
 public class Information {
-
     private DateRate date;
 
     private List<City> cities;

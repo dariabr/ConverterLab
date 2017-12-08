@@ -1,7 +1,5 @@
 package com.joyfullkiwi.converterlab.Home;
 
-
-
 import android.util.Log;
 
 import com.joyfullkiwi.converterlab.Models.City;
@@ -14,14 +12,14 @@ import com.joyfullkiwi.converterlab.Models.Region;
 import com.joyfullkiwi.converterlab.Provider.Query;
 import com.joyfullkiwi.converterlab.Utils.RxAndroid;
 
-import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
 
 import static android.content.ContentValues.TAG;
 
@@ -29,22 +27,28 @@ public class HomeInteractor {
 
     private static HomeInteractor instance;
 
-    private HomeInteractor(){}
+    private HomeInteractor() {
+    }
 
-    public static HomeInteractor init(){
-        if(instance == null){
+    public static HomeInteractor init() {
+        if (instance == null) {
             instance = new HomeInteractor();
         }
         return instance;
     }
 
-    //получение и запись данных ,если дата в базе меньше даты на сервере
-    public Observable<Information> getAndWriteData(){
 
+    public Observable<Information> getAndWriteData() {
+        //инициализация сетевого взаимодействия
         return Query.getInstance()
+                //Получаем API
                 .getApi()
+                //грузим данные
                 .getCurrencyCash()
+                //при подписке на сетевой запрос - выполнинть в новом потоке
                 .subscribeOn(Schedulers.newThread())
+                //при успешной загрузки - сравниваем время с сервера и в нашей бд,
+                // записуем в базу данных если данные новые
                 .doOnNext(result -> RxAndroid.getRealmObject(DateRate.class)
                         .subscribe(dateRate -> {
                             Date serverDate = new Date(result.getDate().getTime());
@@ -55,43 +59,44 @@ public class HomeInteractor {
                                 Log.d(TAG, "update data in : " + resultFormat.format(serverDate));
                                 writeToDatabase(result);
                             }
-                        },error -> writeToDatabase(result)));
+                        }, error -> writeToDatabase(result)));
     }
 
-
+    /*
+    * Запись в базу данных
+    * */
     private void writeToDatabase(Information currencyCash) {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-
+        //запись времени
         realm.delete(DateRate.class);
         DateRate dateRate = realm.createObject(DateRate.class);
         dateRate.setTime(currencyCash.getDate().getTime());
-      //  DateRate dateRate = new DateRate();
 
-        //dateRate.setDate(currencyCash.getDate());
-
-       // realm.copyToRealmOrUpdate(dateRate);
-
+        //Запись городов
         for (City city : currencyCash.getCities()) {
             realm.copyToRealmOrUpdate(city);
         }
 
+        //Запись регионов
         for (Region region : currencyCash.getRegions()) {
             realm.copyToRealmOrUpdate(region);
         }
 
-        //валюта в бд
+        //Запись валют
         for (Currencies currencies : currencyCash.getCurrencies()) {
             realm.copyToRealmOrUpdate(currencies);
         }
 
+        //Запись организаций
         for (Organization organization : currencyCash.getOrganizations()) {
             Organization org = realm.copyToRealmOrUpdate(organization);
-            //перебор список валют ворганизации
+            //перебираем список валют в организации
             Observable.fromIterable(organization.getCurrencies())
                     .subscribe(currency -> {
                         Price serverPrice = currency.getPrice();
+
                         Price dbPrice = realm.createObject(Price.class);
                         dbPrice.setAsk(serverPrice.getAsk());
                         dbPrice.setBid(serverPrice.getBid());
@@ -103,7 +108,7 @@ public class HomeInteractor {
 
         realm.commitTransaction();
         realm.close();
+        Log.d(TAG, "write data to database");
     }
-
 
 }
